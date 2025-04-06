@@ -90,7 +90,7 @@ const PopularDestinations = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="font-montserrat font-bold text-3xl md:text-4xl mb-4">Popular Destinations</h2>
+          <h2 className="font-montserrat font-bold text-3xl md:text-4xl mb-4 px-4 py-1">Popular Destinations</h2>
           <p className="text-gray-700 max-w-2xl mx-auto">
             Explore our handpicked selection of the most breathtaking locations around the world, with immersive 3D previews.
           </p>

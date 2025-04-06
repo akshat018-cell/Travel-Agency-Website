@@ -176,20 +176,7 @@ const HeroSection = () => {
               </Button>
             </div>
 
-            <div className="flex items-center space-x-4 mt-8">
-              <span className="text-white/90 font-light">Trusted by:</span>
-              <div className="flex space-x-4">
-                <div className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <i className="fab fa-tripadvisor text-white"></i>
-                </div>
-                <div className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <i className="fab fa-airbnb text-white"></i>
-                </div>
-                <div className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <i className="fab fa-booking text-white"></i>
-                </div>
-              </div>
-            </div>
+            {/* Removed "Trusted by" section as requested */}
           </motion.div>
 
           {/* Right Content - 3D Globe */}

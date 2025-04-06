@@ -42,7 +42,7 @@ const Testimonials = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="font-montserrat font-bold text-3xl md:text-4xl mb-4">What Our Travelers Say</h2>
+          <h2 className="font-montserrat font-bold text-3xl md:text-4xl mb-4 px-4 py-1">What Our Travelers Say</h2>
           <p className="text-gray-700 max-w-2xl mx-auto">
             Hear from our community of travelers who have experienced unforgettable journeys with Voyager.
           </p>

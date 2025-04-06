@@ -40,7 +40,7 @@ const ParallaxExperience = () => {
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
         >
-          <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-white mb-4">
+          <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-white mb-4 px-4 py-1">
             Immersive Experiences
           </h2>
           <p className="text-white/80 max-w-2xl mx-auto">

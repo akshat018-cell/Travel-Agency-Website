@@ -91,9 +91,19 @@ const Navbar = ({ onOpenLogin, user }: NavbarProps) => {
   };
 
   const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
+    // Map the contact nav item to the newsletter section (which has the contact form)
+    const targetId = sectionId === "contact" ? "newsletter" : sectionId;
+    
+    const section = document.getElementById(targetId);
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      // Get the Y position of the section
+      const yOffset = -80; // 80px offset to account for fixed navbar height
+      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      // Scroll smoothly to that position
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      
+      // Close mobile menu after clicking
       setIsMobileMenuOpen(false);
     }
   };
@@ -102,7 +112,7 @@ const Navbar = ({ onOpenLogin, user }: NavbarProps) => {
     { id: "destinations", label: "Destinations", icon: "fa-map-marked-alt" },
     { id: "accommodations", label: "Accommodations", icon: "fa-hotel" },
     { id: "booking", label: "Book Now", icon: "fa-calendar-alt" },
-    { id: "about", label: "About Us", icon: "fa-info-circle" }
+    { id: "contact", label: "Contact Us", icon: "fa-envelope" }
   ];
 
   return (
@@ -232,12 +242,8 @@ const Navbar = ({ onOpenLogin, user }: NavbarProps) => {
                 </DropdownMenu>
               ) : (
                 <Button
-                  variant={isScrolled ? "default" : "outline"}
-                  className={`px-5 py-6 rounded-full ${
-                    isScrolled
-                      ? "bg-primary text-white hover:bg-primary/90"
-                      : "border-white text-white hover:bg-white/20"
-                  }`}
+                  variant={isScrolled ? "default" : "default"}
+                  className={`px-5 py-6 rounded-full bg-primary text-white hover:bg-primary/90 shadow-md border-0`}
                   onClick={onOpenLogin}
                 >
                   <i className="fas fa-user-circle mr-2"></i>
