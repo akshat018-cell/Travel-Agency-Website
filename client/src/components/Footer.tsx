@@ -114,11 +114,11 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <i className="fas fa-map-marker-alt mt-1 mr-3 text-primary"></i>
-                <span className="text-gray-400">123 Travel Way, Adventure City, AC 10101</span>
+                <span className="text-gray-400">Indore, Madhya Pradesh</span>
               </li>
               <li className="flex items-center">
-                <i className="fas fa-phone-alt mr-3 text-primary"></i>
-                <span className="text-gray-400">+1 (555) 123-4567</span>
+                <i className="fas fa-phone-alt mr-3 text-primary"><git /i>
+                <span className="text-gray-400">+91 7974644795</span>
               </li>
               <li className="flex items-center">
                 <i className="fas fa-envelope mr-3 text-primary"></i>
