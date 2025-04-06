@@ -62,7 +62,7 @@ const HeroSection = () => {
 
   return (
     <header className="relative pt-24 min-h-[90vh] overflow-hidden bg-cover bg-center bg-no-repeat" style={{
-      backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.3)), url("https://images.unsplash.com/photo-1669864708963-f516ea35fcf5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80")',
+      backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80")',
       backgroundAttachment: 'fixed'
     }}>
       {/* Animated overlay particles */}

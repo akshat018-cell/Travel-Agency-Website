@@ -16,7 +16,7 @@ import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import LoginModal from "@/components/auth/LoginModal";
 import UsernameModal from "@/components/auth/UsernameModal";
-import ChatInterface from "@/components/chat/ChatInterface";
+import ChatButton from "@/components/chat/ChatButton";
 
 interface HomeProps {
   user: User | null;
@@ -25,7 +25,6 @@ interface HomeProps {
 const Home = ({ user }: HomeProps) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isUsernameModalOpen, setIsUsernameModalOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
   const { toast } = useToast();
 
@@ -75,14 +74,6 @@ const Home = ({ user }: HomeProps) => {
     }
   }, [user, toast]);
 
-  const handleOpenChat = () => {
-    setIsChatOpen(true);
-  };
-
-  const handleCloseChat = () => {
-    setIsChatOpen(false);
-  };
-
   const handleOpenLogin = () => {
     setIsLoginModalOpen(true);
   };
@@ -108,7 +99,7 @@ const Home = ({ user }: HomeProps) => {
       <LuxuryAccommodations />
       <Testimonials />
       <BookingProcess />
-      <Newsletter onOpenChat={handleOpenChat} />
+      <Newsletter onOpenChat={handleOpenUsernameModal} />
       <Footer />
       <BackToTop />
       
@@ -124,9 +115,8 @@ const Home = ({ user }: HomeProps) => {
         initialName={user?.displayName || ""}
       />
       
-      <ChatInterface 
-        isOpen={isChatOpen} 
-        onClose={handleCloseChat} 
+      {/* Chat Button */}
+      <ChatButton
         user={user}
         userId={userId}
         onShowUsernameModal={handleOpenUsernameModal}
