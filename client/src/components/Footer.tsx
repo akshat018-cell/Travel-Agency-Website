@@ -117,7 +117,7 @@ const Footer = () => {
                 <span className="text-gray-400">Indore, Madhya Pradesh</span>
               </li>
               <li className="flex items-center">
-                <i className="fas fa-phone-alt mr-3 text-primary"><git /i>
+                <i className="fas fa-phone-alt mr-3 text-primary"></i>
                 <span className="text-gray-400">+91 7974644795</span>
               </li>
               <li className="flex items-center">
