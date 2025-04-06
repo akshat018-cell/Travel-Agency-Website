@@ -65,66 +65,144 @@ const Globe = () => {
     globeRef.current = group;
     scene.add(group);
 
-    // Create Earth with realistic Earth texture
+    // Create base sphere for the ocean/water
     const sphereGeometry = new THREE.SphereGeometry(2, 64, 64);
     
-    // Create Earth material with realistic textures
-    const earthMaterial = new THREE.MeshPhongMaterial({
-      shininess: 15,
-      transparent: true,
+    // Create metallic-looking ocean material - deep blue
+    const oceanMaterial = new THREE.MeshPhongMaterial({
+      color: 0x0055aa,
+      shininess: 90,
+      specular: 0x111188,
+      transparent: false,
       opacity: 1
     });
-
-    // Load Earth texture map and bump map for realistic terrain
-    const earthTexture = "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg";
-    const bumpMap = "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg";
-    const cloudMap = "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_clouds_1024.png";
-    const specularMap = "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_specular_2048.jpg";
-
-    if (textureLoader.current) {
-      // Load Earth texture
-      textureLoader.current.load(earthTexture, (texture) => {
-        earthMaterial.map = texture;
-        earthMaterial.needsUpdate = true;
-      });
-
-      // Load bump map for terrain
-      textureLoader.current.load(bumpMap, (texture) => {
-        earthMaterial.normalMap = texture;
-        earthMaterial.normalScale.set(0.05, 0.05);
-        earthMaterial.needsUpdate = true;
-      });
-
-      // Load specular map for oceans
-      textureLoader.current.load(specularMap, (texture) => {
-        earthMaterial.specularMap = texture;
-        earthMaterial.needsUpdate = true;
-      });
-    }
     
-    const earth = new THREE.Mesh(sphereGeometry, earthMaterial);
+    const earth = new THREE.Mesh(sphereGeometry, oceanMaterial);
     group.add(earth);
 
-    // Add cloud layer around Earth
-    const cloudGeometry = new THREE.SphereGeometry(2.02, 64, 64);
-    const cloudMaterial = new THREE.MeshPhongMaterial({
-      transparent: true,
-      opacity: 0.4,
-      alphaTest: 0.05,
-      depthWrite: false
-    });
-
-    if (textureLoader.current) {
-      // Load cloud texture
-      textureLoader.current.load(cloudMap, (texture) => {
-        cloudMaterial.map = texture;
-        cloudMaterial.alphaMap = texture;
-        cloudMaterial.needsUpdate = true;
+    // Add longitude and latitude grid lines
+    const addGridLines = () => {
+      const material = new THREE.LineBasicMaterial({
+        color: 0xaaaaaa,
+        transparent: true,
+        opacity: 0.3
       });
-    }
+      
+      // Add longitude lines
+      for (let i = 0; i < 24; i++) {
+        const lonGeometry = new THREE.BufferGeometry();
+        const points = [];
+        const angle = (i / 24) * Math.PI * 2;
+        
+        for (let j = 0; j <= 180; j++) {
+          const latitude = (j / 180) * Math.PI;
+          const x = 2.01 * Math.sin(latitude) * Math.cos(angle);
+          const y = 2.01 * Math.cos(latitude);
+          const z = 2.01 * Math.sin(latitude) * Math.sin(angle);
+          
+          points.push(new THREE.Vector3(x, y, z));
+        }
+        
+        lonGeometry.setFromPoints(points);
+        const line = new THREE.Line(lonGeometry, material);
+        group.add(line);
+      }
+      
+      // Add latitude lines
+      for (let i = 0; i < 12; i++) {
+        const latGeometry = new THREE.BufferGeometry();
+        const points = [];
+        const latitude = (i / 12) * Math.PI;
+        
+        for (let j = 0; j <= 100; j++) {
+          const angle = (j / 100) * Math.PI * 2;
+          const x = 2.01 * Math.sin(latitude) * Math.cos(angle);
+          const y = 2.01 * Math.cos(latitude);
+          const z = 2.01 * Math.sin(latitude) * Math.sin(angle);
+          
+          points.push(new THREE.Vector3(x, y, z));
+        }
+        
+        latGeometry.setFromPoints(points);
+        const line = new THREE.Line(latGeometry, material);
+        group.add(line);
+      }
+    };
+    
+    addGridLines();
 
-    const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
-    group.add(clouds);
+    // Add continents with raised appearance - similar to example image
+    const addContinent = (name: string, positions: number[][]) => {
+      const continentGroup = new THREE.Group();
+      
+      // Metallic gold material for continents
+      const continentMaterial = new THREE.MeshStandardMaterial({
+        color: 0xd4af37,  // Gold color
+        metalness: 0.8,
+        roughness: 0.2,
+        flatShading: false
+      });
+      
+      // Create continent from small geometries placed at specified positions
+      positions.forEach(pos => {
+        const [lat, lng] = pos;
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lng + 180) * (Math.PI / 180);
+        
+        // Create a box geometry for each point
+        const boxGeometry = new THREE.BoxGeometry(0.12, 0.12, 0.08);
+        const continentPiece = new THREE.Mesh(boxGeometry, continentMaterial);
+        
+        // Position the box on the sphere's surface
+        const x = -(2.02 * Math.sin(phi) * Math.cos(theta));
+        const y = 2.02 * Math.cos(phi);
+        const z = 2.02 * Math.sin(phi) * Math.sin(theta);
+        
+        continentPiece.position.set(x, y, z);
+        
+        // Orient the box to face outward from center
+        continentPiece.lookAt(0, 0, 0);
+        
+        continentGroup.add(continentPiece);
+      });
+      
+      group.add(continentGroup);
+    };
+    
+    // Continent positions (lat, lng)
+    const continents = {
+      'Africa': [
+        [5, 20], [15, 20], [25, 15], [15, 30], [5, 35], [-5, 35], [-15, 30], 
+        [-25, 20], [-30, 15], [-25, 5], [-15, 0], [-5, 10], [5, 10]
+      ],
+      'Europe': [
+        [60, 10], [55, 20], [50, 30], [45, 15], [50, 0], [55, -10], [60, -5],
+        [65, 0], [65, 15], [60, 20], [55, 30], [50, 40], [45, 25], [40, 15], [45, 5]
+      ],
+      'Asia': [
+        [65, 60], [55, 80], [45, 90], [35, 100], [25, 105], [40, 70], [50, 60],
+        [60, 50], [55, 70], [45, 80], [35, 90], [25, 95], [15, 80], [30, 60]
+      ],
+      'North America': [
+        [60, -100], [50, -110], [40, -120], [30, -115], [20, -100], [30, -90],
+        [40, -80], [50, -70], [60, -80], [70, -90], [60, -120], [50, -100], [40, -90]
+      ],
+      'South America': [
+        [10, -70], [0, -65], [-10, -60], [-20, -65], [-30, -70], [-40, -65],
+        [-30, -55], [-20, -50], [-10, -50], [0, -55], [10, -60]
+      ],
+      'Australia': [
+        [-25, 130], [-20, 140], [-25, 150], [-30, 145], [-35, 140], [-30, 130], [-25, 120]
+      ]
+    };
+    
+    // Add each continent
+    Object.entries(continents).forEach(([name, positions]) => {
+      addContinent(name, positions);
+    });
+    
+    // Create empty object for clouds reference (needed in animation)
+    const clouds = new THREE.Object3D();
 
     // Add atmospheric glow
     const glowGeometry = new THREE.SphereGeometry(2.1, 50, 50);
